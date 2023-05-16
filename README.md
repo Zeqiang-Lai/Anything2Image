@@ -8,6 +8,12 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - `imagebind` is directly copy from [official repo](https://github.com/facebookresearch/ImageBind) without any modification. 
 - Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image).
 
+
+Support Tasks
+
+- [Audio to Image](#audio-to-image)
+- [Audio+Text to Image](#audiotext-to-image)
+
 ## Audio to Image
 
 | [bird_audio.wav](assets/wav/bird_audio.wav) | [dog_audio.wav](assets/wav/dog_audio.wav) |  [cattle.wav](assets/wav/cattle.wav) | [cat.wav](assets/wav/cat.wav) | 
@@ -49,7 +55,7 @@ with torch.no_grad():
 | [cat.wav](assets/wav/cat.wav) | [cat.wav](assets/wav/cat.wav) |  [bird_audio.wav](assets/wav/bird_audio.wav) | [bird_audio.wav](assets/wav/bird_audio.wav) | 
 | --- | --- | --- | --- | 
 | A painting    | A photo    |  A painting   |  A photo   | 
-| ![](assets/generated/audio_text_to_image/cat_a_painting.png) | ![](assets/generated/audio_text_to_image/cat_a_photo.png) |![](assets/generated/audio_text_to_image/bird_a_painting.png.png) |![](assets/generated/audio_text_to_image/bird_a_photo.png) |
+| ![](assets/generated/audio_text_to_image/cat_a_painting.png) | ![](assets/generated/audio_text_to_image/cat_a_photo.png) |![](assets/generated/audio_text_to_image/bird_a_painting.png) |![](assets/generated/audio_text_to_image/bird_a_photo.png) |
 
 
 See [audiotext2img.py](audiotext2img.py).
