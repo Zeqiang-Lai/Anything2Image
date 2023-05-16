@@ -108,8 +108,7 @@ with torch.no_grad():
 | --- | --- | --- | --- | 
 | ![](assets/generated/image_to_image/dog_image.png) | ![](assets/generated/image_to_image/bird_image.png) |![](assets/generated/image_to_image/car_image.png) |![](assets/generated/image_to_image/room.png) |
 
-
-See [img2img.py](img2img.py). 
+Top: Input Images. Bottom: Generated Images. See [img2img.py](img2img.py). 
 
 > It is important to set `normalize=False`.
 

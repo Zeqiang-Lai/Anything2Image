@@ -7,6 +7,7 @@
 
 import logging
 import math
+import os
 
 import torch
 import torch.nn as nn
@@ -22,7 +23,8 @@ from .models.multimodal_preprocessors import SimpleTokenizer
 
 DEFAULT_AUDIO_FRAME_SHIFT_MS = 10  # in milliseconds
 
-BPE_PATH = "bpe/bpe_simple_vocab_16e6.txt.gz"
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+BPE_PATH = os.path.join(CURRENT_DIR, "bpe/bpe_simple_vocab_16e6.txt.gz")
 
 
 def waveform2melspec(waveform, sample_rate, num_mel_bins, target_length):

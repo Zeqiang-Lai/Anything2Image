@@ -23,7 +23,7 @@ with torch.no_grad():
         imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(["assets/wav/wave.wav"], device),
     }, normalize=False)
     audio_embeddings = embeddings[imagebind.ModalityType.AUDIO]
-    embeddings = img_embeddings + audio_embeddings
+    embeddings = (img_embeddings + audio_embeddings)/2
     images = pipe(image_embeds=embeddings).images
     images[0].save("out.png")
     
