@@ -79,6 +79,8 @@ with torch.no_grad():
 
 ## Audio+Image to Image
 
+Seems not work very well. Stay tuned.
+
 | Image | Audio 1 | Output 1 |  Audio 2  | Output 2 | 
 | --- | --- | --- | --- | --- | 
 | ![](assets/image/bird.png) | [wave.wav](assets/wav/wave.wav) | ![](assets/generated/audio_image_to_image/bird_wave.png) |  [rain.wav](assets/wav/wave.wav) | ![](assets/generated/audio_image_to_image/bird_rain.png) | 
