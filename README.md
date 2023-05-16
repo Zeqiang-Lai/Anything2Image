@@ -5,7 +5,7 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 - No training is need.
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
-- `imagebind` is directly copy from [official repo](https://github.com/facebookresearch/ImageBind) with modification. 
+- `imagebind` is directly copy from [official repo](https://github.com/facebookresearch/ImageBind) without any modification. 
 - Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image).
 
 ## Audio to Image
