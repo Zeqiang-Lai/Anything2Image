@@ -8,9 +8,9 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 ## Audio to Image
 
-| `assets/bird_audio.wav` | `assets/dog_audio.wav` | 
-| --- | --- |
-| ![](assets/generated/bird_audio.png) | ![](assets/generated/dog_audio.png) |
+| `assets/wav/bird_audio.wav` | `assets/wav/dog_audio.wav` |  `assets/wav/cattle.wav`
+| --- | --- | --- | 
+| ![](assets/generated/bird_audio.png) | ![](assets/generated/dog_audio.png) |![](assets/generated/cattle.png) |
 
 ```python
 import imagebind
@@ -30,7 +30,7 @@ model.to(device)
 
 # generate image
 with torch.no_grad():
-    audio_paths=["assets/bird_audio.wav"]
+    audio_paths=["assets/wav/bird_audio.wav"]
     embeddings = model.forward({
         imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(audio_paths, device),
     })
