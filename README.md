@@ -9,7 +9,7 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 ## Audio to Image
 
-| `assets/wav/bird_audio.wav` | `assets/wav/dog_audio.wav` |  `assets/wav/cattle.wav` | `assets/wav/cat.wav` | 
+| [bird_audio.wav](assets/wav/bird_audio.wav) | [dog_audio.wav](assets/wav/dog_audio.wav) |  [cattle.wav](assets/wav/cattle.wav) | [cat.wav](assets/wav/cat.wav) | 
 | --- | --- | --- | --- | 
 | ![](assets/generated/bird_audio.png) | ![](assets/generated/dog_audio.png) |![](assets/generated/cattle.png) |![](assets/generated/cat.png) |
 
