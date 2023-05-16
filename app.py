@@ -16,7 +16,7 @@ model.eval()
 model.to(device)
 
 @torch.no_grad()
-def anything2img(prompt, audio, image):
+def anything2img(prompt, audio, image, text):
     if audio is not None:
         sr, waveform = audio
         sf.write('tmp.wav', waveform, sr)
@@ -28,22 +28,28 @@ def anything2img(prompt, audio, image):
         Image.fromarray(image).save('tmp.png')
         embeddings = model.forward({
             imagebind.ModalityType.VISION: imagebind.load_and_transform_vision_data(['tmp.png'], device),
-        })
+        }, normalize=False)
         image_embeddings = embeddings[imagebind.ModalityType.VISION]
-
-    if audio_embeddings is not None and image_embeddings is not None:
+        
+    if audio is not None and image is not None:
         embeddings = audio_embeddings + image_embeddings
-    elif image_embeddings is not None:
+    elif image is not None:
         embeddings = image_embeddings
-    elif audio_embeddings is not None:
+    elif audio is not None:
         embeddings = audio_embeddings
     else:
         embeddings = None
     
+    if text is not None:
+        embeddings = model.forward({
+            imagebind.ModalityType.TEXT: imagebind.load_and_transform_text([text], device),
+        })
+        embeddings = embeddings[imagebind.ModalityType.TEXT]
+        
     images = pipe(prompt=prompt, image_embeds=embeddings).images
     return images[0]
     
 
-demo = gr.Interface(fn=anything2img, inputs=["text", "audio", "image"], outputs="image")
+demo = gr.Interface(fn=anything2img, inputs=["text", "audio", "image", "text"], outputs="image")
 # demo.launch(server_name='0.0.0.0', server_port=10051, share=True)
 demo.launch(server_name='0.0.0.0', server_port=10047, share=True)

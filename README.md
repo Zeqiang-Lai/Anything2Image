@@ -5,7 +5,6 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 - No training is need.
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
-- `imagebind` is directly copy from [official repo](https://github.com/facebookresearch/ImageBind) without any modification. 
 - Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image).
 
 
@@ -14,6 +13,8 @@ Support Tasks
 - [Audio to Image](#audio-to-image)
 - [Audio+Text to Image](#audiotext-to-image)
 - [Audio+Image to Image](#audioimage-to-image)
+- [Image to Image](#image-to-image)
+- [Text to Image](#text-to-image)
 
 ## Audio to Image
 
@@ -36,7 +37,7 @@ from diffusers import StableUnCLIPImg2ImgPipeline
 # construct models
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=torch.float16, variation="fp16"
+    "stabilityai/stable-diffusion-2-1-unclip"
 )
 pipe = pipe.to(device)
 
@@ -79,7 +80,7 @@ with torch.no_grad():
 
 ## Audio+Image to Image
 
-Seems not work very well. Stay tuned.
+Stay tuned
 
 | Image | Audio 1 | Output 1 |  Audio 2  | Output 2 | 
 | --- | --- | --- | --- | --- | 
@@ -93,7 +94,7 @@ with torch.no_grad():
     img_embeddings = embeddings[imagebind.ModalityType.VISION]
     embeddings = model.forward({
         imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(["assets/wav/wave.wav"], device),
-    })
+    }, normalize=False)
     audio_embeddings = embeddings[imagebind.ModalityType.AUDIO]
     embeddings = img_embeddings + audio_embeddings
     images = pipe(image_embeds=embeddings.half()).images
@@ -103,17 +104,52 @@ with torch.no_grad():
 
 ## Image to Image
 
-See [img2img.py](img2img.py). Stay tuned.
+| ![](assets/image/dog_image.jpg) | ![](assets/image/bird_image.jpg) |  ![](assets/image/car_image.jpg) | ![](assets/image/room.png) | 
+| --- | --- | --- | --- | 
+| ![](assets/generated/image_to_image/dog_image.png) | ![](assets/generated/image_to_image/bird_image.png) |![](assets/generated/image_to_image/car_image.png) |![](assets/generated/image_to_image/room.png) |
 
 
-## Discussion
+See [img2img.py](img2img.py). 
+
+> It is important to set `normalize=False`.
+
+```python
+with torch.no_grad():
+    paths=["assets/image/dog_image.jpg"]
+    embeddings = model.forward({
+        imagebind.ModalityType.VISION: imagebind.load_and_transform_vision_data(paths, device),
+    }, normalize=False)
+    embeddings = embeddings[imagebind.ModalityType.VISION]
+    images = pipe(image_embeds=embeddings).images
+    images[0].save("out.png")
+```
+
+## Text to Image
+
+| A photo of a car. | A sunset over the ocean. | A bird's-eye view of a cityscape.  | A close-up of a flower. | 
+| --- | --- | --- | --- | 
+| ![](assets/generated/text_to_image/dog_image.png) | ![](assets/generated/text_to_image/bird_image.png) |![](assets/generated/text_to_image/car_image.png) |![](assets/generated/text_to_image/room.png) |
+
+It is not necessary to use ImageBind for text to image. Nervertheless, we show the alignment of ImageBind's text latent space and its image spaces.
+
+```python
+with torch.no_grad():
+    embeddings = model.forward({
+        imagebind.ModalityType.TEXT: imagebind.load_and_transform_text(['a photo of a bird.'], device),
+    })
+    embeddings = embeddings[imagebind.ModalityType.TEXT]
+    images = pipe(image_embeds=embeddings).images
+    images[0].save("bird.png")
+```
+
+<!-- ## Discussion
 
 Failure cases
 
 | Audio to Image | Audio to Image | Image to Image | 
 | --- | --- | --- | 
 | [car_audio.wav](assets/wav/car_audio.wav) | [goat.wav](assets/wav/goat.wav) | ![](assets/image/car_image.jpg) | 
-| ![](assets/generated/audio_to_image/car_audio.png) | ![](assets/generated/audio_to_image/goat.png)  | ![](assets/generated/image_to_image/car_image.png) | 
+| ![](assets/generated/audio_to_image/car_audio.png) | ![](assets/generated/audio_to_image/goat.png)  | ![](assets/generated/image_to_image/car_image.png) |  -->
 
 
 ## Citation

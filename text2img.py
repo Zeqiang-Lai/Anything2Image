@@ -15,10 +15,9 @@ model.to(device)
 
 # generate image
 with torch.no_grad():
-    audio_paths=["assets/wav/bird_audio.wav"]
     embeddings = model.forward({
-        imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(audio_paths, device),
+        imagebind.ModalityType.TEXT: imagebind.load_and_transform_text(['A photo of a car.'], device),
     })
-    embeddings = embeddings[imagebind.ModalityType.AUDIO]
+    embeddings = embeddings[imagebind.ModalityType.TEXT]
     images = pipe(image_embeds=embeddings).images
-    images[0].save("bird_audio.png")
+    images[0].save("bird.png")
