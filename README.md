@@ -12,7 +12,9 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 | [bird_audio.wav](assets/wav/bird_audio.wav) | [dog_audio.wav](assets/wav/dog_audio.wav) |  [cattle.wav](assets/wav/cattle.wav) | [cat.wav](assets/wav/cat.wav) | 
 | --- | --- | --- | --- | 
-| ![](assets/generated/bird_audio.png) | ![](assets/generated/dog_audio.png) |![](assets/generated/cattle.png) |![](assets/generated/cat.png) |
+| ![](assets/generated/audio_to_image/bird_audio.png) | ![](assets/generated/audio_to_image/dog_audio.png) |![](assets/generated/audio_to_image/cattle.png) |![](assets/generated/audio_to_image/cat.png) |
+
+See [audio2img.py](audio2img.py).
 
 ```python
 import imagebind
@@ -41,10 +43,43 @@ with torch.no_grad():
     images[0].save("bird_audio.png")
 ```
 
-## More 
+## Audio+Text to Image 
 
-Under construction
 
+| [cat.wav](assets/wav/cat.wav) | [cat.wav](assets/wav/cat.wav) |  [bird_audio.wav](assets/wav/bird_audio.wav) | [bird_audio.wav](assets/wav/bird_audio.wav) | 
+| --- | --- | --- | --- | 
+| A painting    | A photo    |  A painting   |  A photo   | 
+| ![](assets/generated/audio_text_to_image/cat_a_painting.png) | ![](assets/generated/audio_text_to_image/cat_a_photo.png) |![](assets/generated/audio_text_to_image/bird_a_painting.png.png) |![](assets/generated/audio_text_to_image/bird_a_photo.png) |
+
+
+See [audiotext2img.py](audiotext2img.py).
+
+```python
+import imagebind
+import torch
+from diffusers import StableUnCLIPImg2ImgPipeline
+
+# construct models
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
+pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=torch.float16, variation="fp16"
+)
+pipe = pipe.to(device)
+
+model = imagebind.imagebind_huge(pretrained=True)
+model.eval()
+model.to(device)
+
+# generate image
+with torch.no_grad():
+    audio_paths=["assets/wav/bird_audio.wav"]
+    embeddings = model.forward({
+        imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(audio_paths, device),
+    })
+    embeddings = embeddings[imagebind.ModalityType.AUDIO]
+    images = pipe(prompt='a painting', image_embeds=embeddings.half()).images
+    images[0].save("bird_audio.png")
+```
 
 ## Citation
 
