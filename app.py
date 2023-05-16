@@ -7,7 +7,7 @@ from PIL import Image
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-2-1-unclip",
+    "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=torch.float16
 )
 pipe = pipe.to(device)
 
@@ -32,7 +32,7 @@ def anything2img(prompt, audio, image, text):
         image_embeddings = embeddings[imagebind.ModalityType.VISION]
         
     if audio is not None and image is not None:
-        embeddings = audio_embeddings + image_embeddings
+        embeddings = (audio_embeddings + image_embeddings) / 2
     elif image is not None:
         embeddings = image_embeddings
     elif audio is not None:
@@ -40,12 +40,15 @@ def anything2img(prompt, audio, image, text):
     else:
         embeddings = None
     
-    if text is not None:
+    if text is not None and text != "":
         embeddings = model.forward({
             imagebind.ModalityType.TEXT: imagebind.load_and_transform_text([text], device),
-        })
+        }, normalize=False)
         embeddings = embeddings[imagebind.ModalityType.TEXT]
-        
+    
+    if embeddings is not None:
+        embeddings = embeddings.half()
+    
     images = pipe(prompt=prompt, image_embeds=embeddings).images
     return images[0]
     

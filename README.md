@@ -7,7 +7,6 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
 - Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image).
 
-
 Support Tasks
 
 - [Audio to Image](#audio-to-image)
@@ -37,7 +36,7 @@ from diffusers import StableUnCLIPImg2ImgPipeline
 # construct models
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-2-1-unclip"
+    "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=torch.float16
 )
 pipe = pipe.to(device)
 
@@ -127,7 +126,7 @@ with torch.no_grad():
 
 | A photo of a car. | A sunset over the ocean. | A bird's-eye view of a cityscape.  | A close-up of a flower. | 
 | --- | --- | --- | --- | 
-| ![](assets/generated/text_to_image/dog_image.png) | ![](assets/generated/text_to_image/bird_image.png) |![](assets/generated/text_to_image/car_image.png) |![](assets/generated/text_to_image/room.png) |
+| ![](assets/generated/text_to_image/car.png) | ![](assets/generated/text_to_image/sunset.png) |![](assets/generated/text_to_image/city.png) |![](assets/generated/text_to_image/flower.png) |
 
 It is not necessary to use ImageBind for text to image. Nervertheless, we show the alignment of ImageBind's text latent space and its image spaces.
 
@@ -135,7 +134,7 @@ It is not necessary to use ImageBind for text to image. Nervertheless, we show t
 with torch.no_grad():
     embeddings = model.forward({
         imagebind.ModalityType.TEXT: imagebind.load_and_transform_text(['a photo of a bird.'], device),
-    })
+    }, normalize=False)
     embeddings = embeddings[imagebind.ModalityType.TEXT]
     images = pipe(image_embeds=embeddings).images
     images[0].save("bird.png")
