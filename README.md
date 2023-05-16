@@ -79,9 +79,9 @@ with torch.no_grad():
 
 ## Audio+Image to Image
 
-| Audio | Image | Output | 
-| --- | --- | --- | 
-| [wave.wav](assets/wav/wave.wav) | ![](assets/image/bird.png) | ![](assets/generated/audio_image_to_image/bird_wave.png) | 
+| Image | Audio 1 | Output 1 |  Audio 2  | Output 2 | 
+| --- | --- | --- | --- | --- | 
+| ![](assets/image/bird.png) | [wave.wav](assets/wav/wave.wav) | ![](assets/generated/audio_image_to_image/bird_wave.png) |  [rain.wav](assets/wav/wave.wav) | ![](assets/generated/audio_image_to_image/bird_rain.png) | 
 
 ```python
 with torch.no_grad():
@@ -108,10 +108,10 @@ See [img2img.py](img2img.py). Stay tuned.
 
 Failure cases
 
-| Audio to Image | Image to Image | 
-| --- | --- | 
-| [car_audio.wav](assets/wav/car_audio.wav) | ![](assets/image/car_image.jpg) | 
-| ![](assets/generated/audio_to_image/car_audio.png) | ![](assets/generated/image_to_image/car_image.png) | 
+| Audio to Image | Audio to Image | Image to Image | 
+| --- | --- | --- | 
+| [car_audio.wav](assets/wav/car_audio.wav) | [goat.wav](assets/wav/goat.wav) | ![](assets/image/car_image.jpg) | 
+| ![](assets/generated/audio_to_image/car_audio.png) | ![](assets/generated/audio_to_image/goat.png)  | ![](assets/generated/image_to_image/car_image.png) | 
 
 
 ## Citation
