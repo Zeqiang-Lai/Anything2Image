@@ -13,12 +13,18 @@ Support Tasks
 
 - [Audio to Image](#audio-to-image)
 - [Audio+Text to Image](#audiotext-to-image)
+- [Audio+Image to Image](#audioimage-to-image)
 
 ## Audio to Image
 
 | [bird_audio.wav](assets/wav/bird_audio.wav) | [dog_audio.wav](assets/wav/dog_audio.wav) |  [cattle.wav](assets/wav/cattle.wav) | [cat.wav](assets/wav/cat.wav) | 
 | --- | --- | --- | --- | 
 | ![](assets/generated/audio_to_image/bird_audio.png) | ![](assets/generated/audio_to_image/dog_audio.png) |![](assets/generated/audio_to_image/cattle.png) |![](assets/generated/audio_to_image/cat.png) |
+
+| [fire_engine.wav](assets/wav/fire_engine.wav) | [train.wav](assets/wav/train.wav) |  [motorcycle.wav](assets/wav/motorcycle.wav) | [plane.wav](assets/wav/plane.wav) | 
+| --- | --- | --- | --- | 
+| ![](assets/generated/audio_to_image/fire_engine.png) | ![](assets/generated/audio_to_image/train.png) |![](assets/generated/audio_to_image/motorcycle.png) |![](assets/generated/audio_to_image/plane.png) |
+
 
 See [audio2img.py](audio2img.py).
 
@@ -61,22 +67,6 @@ with torch.no_grad():
 See [audiotext2img.py](audiotext2img.py).
 
 ```python
-import imagebind
-import torch
-from diffusers import StableUnCLIPImg2ImgPipeline
-
-# construct models
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
-pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=torch.float16, variation="fp16"
-)
-pipe = pipe.to(device)
-
-model = imagebind.imagebind_huge(pretrained=True)
-model.eval()
-model.to(device)
-
-# generate image
 with torch.no_grad():
     audio_paths=["assets/wav/bird_audio.wav"]
     embeddings = model.forward({
@@ -86,6 +76,43 @@ with torch.no_grad():
     images = pipe(prompt='a painting', image_embeds=embeddings.half()).images
     images[0].save("bird_audio.png")
 ```
+
+## Audio+Image to Image
+
+| Audio | Image | Output | 
+| --- | --- | --- | 
+| [wave.wav](assets/wav/wave.wav) | ![](assets/image/bird.png) | ![](assets/generated/audio_image_to_image/bird_wave.png) | 
+
+```python
+with torch.no_grad():
+    embeddings = model.forward({
+        imagebind.ModalityType.VISION: imagebind.load_and_transform_vision_data(["assets/image/bird.png"], device),
+    })
+    img_embeddings = embeddings[imagebind.ModalityType.VISION]
+    embeddings = model.forward({
+        imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(["assets/wav/wave.wav"], device),
+    })
+    audio_embeddings = embeddings[imagebind.ModalityType.AUDIO]
+    embeddings = img_embeddings + audio_embeddings
+    images = pipe(image_embeds=embeddings.half()).images
+    images[0].save("out.png")
+```
+
+
+## Image to Image
+
+See [img2img.py](img2img.py). Stay tuned.
+
+
+## Discussion
+
+Failure cases
+
+| Audio to Image | Image to Image | 
+| --- | --- | 
+| [car_audio.wav](assets/wav/car_audio.wav) | ![](assets/image/car_image.jpg) | 
+| ![](assets/generated/audio_to_image/car_audio.png) | ![](assets/generated/image_to_image/car_image.png) | 
+
 
 ## Citation
 
