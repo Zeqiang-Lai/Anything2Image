@@ -5,12 +5,13 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - No training is need.
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
 - `imagebind` is directly copy from [official repo](https://github.com/facebookresearch/ImageBind) with modification. 
+- Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image).
 
 ## Audio to Image
 
-| `assets/wav/bird_audio.wav` | `assets/wav/dog_audio.wav` |  `assets/wav/cattle.wav`
-| --- | --- | --- | 
-| ![](assets/generated/bird_audio.png) | ![](assets/generated/dog_audio.png) |![](assets/generated/cattle.png) |
+| `assets/wav/bird_audio.wav` | `assets/wav/dog_audio.wav` |  `assets/wav/cattle.wav` | `assets/wav/cat.wav` | 
+| --- | --- | --- | --- | 
+| ![](assets/generated/bird_audio.png) | ![](assets/generated/dog_audio.png) |![](assets/generated/cattle.png) |![](assets/generated/cat.png) |
 
 ```python
 import imagebind
