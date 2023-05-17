@@ -20,7 +20,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                              "image", 
                              "text",
                              ], 
-                     outputs="text",
+                     outputs="image",
                      examples=[['', 'assets/wav/dog_audio.wav', None, None],
                                ['A painting', 'assets/wav/cat.wav', None, None],
                                ['', 'assets/wav/wave.wav', 'assets/image/bird.png', None],
