@@ -16,17 +16,33 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - [Image to Image](#image-to-image)
 - [Text to Image](#text-to-image)
 
+## Getting Started
+
 **Requirements**
+
+Ensure you have PyTorch installed. 
 
 - Python >= 3.8
 - PyTorch >= 1.13
 
+Then install the `anything2image`.
+
+```bash
+# from pypi
+pip install anything2image
+# or locally install via git clone
+git clone git@github.com:Zeqiang-Lai/Anything2Image.git
+cd Anything2Image
+pip install .
+```
+
 **Usage**
 
 ```bash
-pip install anything2image
 # lanuch gradio demo
 python -m anything2image.app
+# command line demo, see also the tasks examples below.
+python -m anything2image.cli --audio assets/wav/cat.wav
 ```
 
 ## Audio to Image
@@ -96,12 +112,10 @@ with torch.no_grad():
 
 ## Audio+Image to Image
 
-Stay tuned
-
-| Image | Audio 1 | Output 1 |  Audio 2  | Output 2 | 
-| --- | --- | --- | --- | --- | 
-| ![](assets/image/bird.png) | [wave.wav](assets/wav/wave.wav) | ![](assets/generated/audio_image_to_image/bird_wave.png) |  [rain.wav](assets/wav/wave.wav) | ![](assets/generated/audio_image_to_image/bird_rain.png) | 
-
+| Audio & Image | Output | Audio & Image  | Output  | 
+| --- | --- | --- | --- | 
+| ![](assets/image/bird.png) | ![](assets/generated/audio_image_to_image/bird_wave.png) | ![](assets/image/dog_image.jpg) | ![](assets/generated/audio_image_to_image/dog_wave.png) | 
+| [wave.wav](assets/wav/wave.wav) |  |  [wave.wav](assets/wav/wave.wav) |   |
 ```bash
 python -m anything2image.cli --audio assets/wav/wave.wav --image "assets/image/bird.png"
 ```

@@ -14,7 +14,7 @@ class Anything2Image:
         imagebind_download_dir="checkpoints"
     ):
         self.pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
-            "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=torch.float16
+            "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=None if device == 'cpu' else torch.float16,
         ).to(device)
         self.model = imagebind.imagebind_huge(pretrained=True, download_dir=imagebind_download_dir).eval().to(device)
         self.device = device
@@ -52,7 +52,7 @@ class Anything2Image:
             }, normalize=False)
             embeddings = embeddings[imagebind.ModalityType.TEXT]
         
-        if embeddings is not None:
+        if embeddings is not None and self.device != 'cpu':
             embeddings = embeddings.half()
         
         images = pipe(prompt=prompt, image_embeds=embeddings).images
