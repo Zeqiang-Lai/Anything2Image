@@ -1,4 +1,4 @@
-import imagebind
+import anything2image.imagebind as ib
 import torch
 from diffusers import StableUnCLIPImg2ImgPipeline
 
@@ -9,16 +9,17 @@ pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
 )
 pipe = pipe.to(device)
 
-model = imagebind.imagebind_huge(pretrained=True)
+model = ib.imagebind_huge(pretrained=True)
 model.eval()
 model.to(device)
 
 # generate image
 with torch.no_grad():
-    audio_paths=["assets/wav/bird_audio.wav"]
+    paths=["assets/image/room.png"]
     embeddings = model.forward({
-        imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(audio_paths, device),
-    })
-    embeddings = embeddings[imagebind.ModalityType.AUDIO]
-    images = pipe(image_embeds=embeddings).images
-    images[0].save("bird_audio.png")
+        ib.ModalityType.VISION: ib.load_and_transform_vision_data(paths, device),
+    }, normalize=False)
+    embeddings = embeddings[ib.ModalityType.VISION]
+    images = pipe(image_embeds=embeddings.half()).images
+    images[0].save("img2img.png")
+    

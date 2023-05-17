@@ -1,4 +1,4 @@
-import imagebind
+import anything2image.imagebind as ib
 import torch
 from diffusers import StableUnCLIPImg2ImgPipeline
 
@@ -9,17 +9,15 @@ pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
 )
 pipe = pipe.to(device)
 
-model = imagebind.imagebind_huge(pretrained=True)
+model = ib.imagebind_huge(pretrained=True)
 model.eval()
 model.to(device)
 
 # generate image
 with torch.no_grad():
-    paths=["assets/image/room.png"]
     embeddings = model.forward({
-        imagebind.ModalityType.VISION: imagebind.load_and_transform_vision_data(paths, device),
+        ib.ModalityType.TEXT: ib.load_and_transform_text(['A photo of a car.'], device),
     }, normalize=False)
-    embeddings = embeddings[imagebind.ModalityType.VISION]
-    images = pipe(image_embeds=embeddings).images
-    images[0].save("out.png")
-    
+    embeddings = embeddings[ib.ModalityType.TEXT]
+    images = pipe(image_embeds=embeddings.half()).images
+    images[0].save("text2img.png")

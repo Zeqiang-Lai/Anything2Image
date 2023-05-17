@@ -7,7 +7,7 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
 - Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image).
 
-Support Tasks
+**Support Tasks**
 
 - [Audio to Image](#audio-to-image)
 - [Audio+Text to Image](#audiotext-to-image)
@@ -15,7 +15,19 @@ Support Tasks
 - [Image to Image](#image-to-image)
 - [Text to Image](#text-to-image)
 
+**Usage**
+
+```bash
+pip install anything2image
+# lanuch gradio demo
+python -m anything2image.app
+```
+
 ## Audio to Image
+
+```bash
+python -m anything2image.cli --audio assets/wav/cat.wav
+```
 
 | [bird_audio.wav](assets/wav/bird_audio.wav) | [dog_audio.wav](assets/wav/dog_audio.wav) |  [cattle.wav](assets/wav/cattle.wav) | [cat.wav](assets/wav/cat.wav) | 
 | --- | --- | --- | --- | 
@@ -26,10 +38,10 @@ Support Tasks
 | ![](assets/generated/audio_to_image/fire_engine.png) | ![](assets/generated/audio_to_image/train.png) |![](assets/generated/audio_to_image/motorcycle.png) |![](assets/generated/audio_to_image/plane.png) |
 
 
-See [audio2img.py](audio2img.py).
+See also [audio2img.py](tasks/audio2img.py).
 
 ```python
-import imagebind
+import anything2image.imagebind as ib
 import torch
 from diffusers import StableUnCLIPImg2ImgPipeline
 
@@ -37,22 +49,18 @@ from diffusers import StableUnCLIPImg2ImgPipeline
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
     "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=torch.float16
-)
-pipe = pipe.to(device)
-
-model = imagebind.imagebind_huge(pretrained=True)
-model.eval()
-model.to(device)
+).to(device)
+model = ib.imagebind_huge(pretrained=True).eval().to(device)
 
 # generate image
 with torch.no_grad():
     audio_paths=["assets/wav/bird_audio.wav"]
     embeddings = model.forward({
-        imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(audio_paths, device),
+        ib.ModalityType.AUDIO: ib.load_and_transform_audio_data(audio_paths, device),
     })
-    embeddings = embeddings[imagebind.ModalityType.AUDIO]
+    embeddings = embeddings[ib.ModalityType.AUDIO]
     images = pipe(image_embeds=embeddings.half()).images
-    images[0].save("bird_audio.png")
+    images[0].save("audio2img.png")
 ```
 
 ## Audio+Text to Image 
@@ -70,11 +78,11 @@ See [audiotext2img.py](audiotext2img.py).
 with torch.no_grad():
     audio_paths=["assets/wav/bird_audio.wav"]
     embeddings = model.forward({
-        imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(audio_paths, device),
+        ib.ModalityType.AUDIO: ib.load_and_transform_audio_data(audio_paths, device),
     })
-    embeddings = embeddings[imagebind.ModalityType.AUDIO]
+    embeddings = embeddings[ib.ModalityType.AUDIO]
     images = pipe(prompt='a painting', image_embeds=embeddings.half()).images
-    images[0].save("bird_audio.png")
+    images[0].save("audiotext2img.png")
 ```
 
 ## Audio+Image to Image
@@ -88,16 +96,16 @@ Stay tuned
 ```python
 with torch.no_grad():
     embeddings = model.forward({
-        imagebind.ModalityType.VISION: imagebind.load_and_transform_vision_data(["assets/image/bird.png"], device),
+        ib.ModalityType.VISION: ib.load_and_transform_vision_data(["assets/image/bird.png"], device),
     })
-    img_embeddings = embeddings[imagebind.ModalityType.VISION]
+    img_embeddings = embeddings[ib.ModalityType.VISION]
     embeddings = model.forward({
-        imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(["assets/wav/wave.wav"], device),
+        ib.ModalityType.AUDIO: ib.load_and_transform_audio_data(["assets/wav/wave.wav"], device),
     }, normalize=False)
-    audio_embeddings = embeddings[imagebind.ModalityType.AUDIO]
-    embeddings = img_embeddings + audio_embeddings
+    audio_embeddings = embeddings[ib.ModalityType.AUDIO]
+    embeddings = (img_embeddings + audio_embeddings)/2
     images = pipe(image_embeds=embeddings.half()).images
-    images[0].save("out.png")
+    images[0].save("audioimg2img.png")
 ```
 
 
@@ -113,13 +121,13 @@ Top: Input Images. Bottom: Generated Images. See [img2img.py](img2img.py).
 
 ```python
 with torch.no_grad():
-    paths=["assets/image/dog_image.jpg"]
+    paths=["assets/image/room.png"]
     embeddings = model.forward({
-        imagebind.ModalityType.VISION: imagebind.load_and_transform_vision_data(paths, device),
+        ib.ModalityType.VISION: ib.load_and_transform_vision_data(paths, device),
     }, normalize=False)
-    embeddings = embeddings[imagebind.ModalityType.VISION]
-    images = pipe(image_embeds=embeddings).images
-    images[0].save("out.png")
+    embeddings = embeddings[ib.ModalityType.VISION]
+    images = pipe(image_embeds=embeddings.half()).images
+    images[0].save("img2img.png")
 ```
 
 ## Text to Image
@@ -133,11 +141,11 @@ It is not necessary to use ImageBind for text to image. Nervertheless, we show t
 ```python
 with torch.no_grad():
     embeddings = model.forward({
-        imagebind.ModalityType.TEXT: imagebind.load_and_transform_text(['a photo of a bird.'], device),
+        ib.ModalityType.TEXT: ib.load_and_transform_text(['A photo of a car.'], device),
     }, normalize=False)
-    embeddings = embeddings[imagebind.ModalityType.TEXT]
-    images = pipe(image_embeds=embeddings).images
-    images[0].save("bird.png")
+    embeddings = embeddings[ib.ModalityType.TEXT]
+    images = pipe(image_embeds=embeddings.half()).images
+    images[0].save("text2img.png")
 ```
 
 <!-- ## Discussion
