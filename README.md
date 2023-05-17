@@ -7,8 +7,8 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 - No training is need.
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
-- Online demo with [Huggingface Gradio](#getting-started). 
-- Colab demo with [Google Colab](https://colab.research.google.com/github/Zeqiang-Lai/Anything2Image/blob/main/colab.ipynb)
+- Online [demo](#getting-started) with Huggingface Gradio. 
+- Colab [demo](https://colab.research.google.com/github/Zeqiang-Lai/Anything2Image/blob/main/colab.ipynb) with Google Colab.
 
 **Support Tasks**
 
