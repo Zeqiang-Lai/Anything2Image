@@ -18,6 +18,8 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - [Audio+Image to Image](#audioimage-to-image)
 - [Image to Image](#image-to-image)
 - [Text to Image](#text-to-image)
+- Depth to Image: Coming soon.
+- Thermal to Image: Coming soon.
 
 ## Getting Started
 
