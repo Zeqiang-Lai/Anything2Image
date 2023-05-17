@@ -6,7 +6,7 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 - No training is need.
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
-- Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image).
+- Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image). 
 
 **Support Tasks**
 

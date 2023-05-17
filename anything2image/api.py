@@ -1,6 +1,6 @@
+import os
 import soundfile as sf
 import torch
-import numpy as np
 from diffusers import StableUnCLIPImg2ImgPipeline
 from PIL import Image
 
@@ -30,13 +30,14 @@ class Anything2Image:
                 imagebind.ModalityType.AUDIO: imagebind.load_and_transform_audio_data(['tmp.wav'], device),
             })
             audio_embeddings = embeddings[imagebind.ModalityType.AUDIO]
+            os.remove('tmp.wav')
         if image is not None:
             Image.fromarray(image).save('tmp.png')
             embeddings = model.forward({
                 imagebind.ModalityType.VISION: imagebind.load_and_transform_vision_data(['tmp.png'], device),
             }, normalize=False)
             image_embeddings = embeddings[imagebind.ModalityType.VISION]
-            
+            os.remove('tmp.png')
         if audio is not None and image is not None:
             embeddings = (audio_embeddings + image_embeddings) / 2
         elif image is not None:

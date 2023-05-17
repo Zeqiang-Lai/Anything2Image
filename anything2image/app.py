@@ -3,6 +3,8 @@ import fire
 import os
 from anything2image.api import Anything2Image
 
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'checkpoints'), ip=None, port=None, share=False):
     anything2img = Anything2Image(imagebind_download_dir=ckpt_dir)
@@ -16,7 +18,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
             """
         )
         with gr.Tab('Audio to Image'):
-            wav_dir = 'assets/wav'
+            wav_dir = os.path.join(CURRENT_DIR, 'assets/wav')
             def audio2image(audio): return anything2img(audio=audio)
             gr.Interface(
                 fn=audio2image,
@@ -25,17 +27,17 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                 examples=[os.path.join(wav_dir, name) for name in os.listdir(wav_dir)],
             )
         with gr.Tab('Audio+Text to Image'):
-            wav_dir = 'assets/wav'
+            wav_dir = os.path.join(CURRENT_DIR, 'assets/wav')
             def audiotext2image(prompt, audio): return anything2img(prompt=prompt, audio=audio)
             gr.Interface(
                 fn=audiotext2image,
                 inputs=["text","audio"],
                 outputs="image",
                 examples=[
-                    ['A painting', 'assets/wav/cat.wav'],
-                    ['A photo', 'assets/wav/cat.wav'],
-                    ['A painting', 'assets/wav/dog_audio.wav'],
-                    ['A photo', 'assets/wav/dog_audio.wav'],
+                    ['A painting', os.path.join(CURRENT_DIR, 'assets/wav/cat.wav')],
+                    ['A photo', os.path.join(CURRENT_DIR, 'assets/wav/cat.wav')],
+                    ['A painting', os.path.join(CURRENT_DIR, 'assets/wav/dog_audio.wav')],
+                    ['A photo', os.path.join(CURRENT_DIR, 'assets/wav/dog_audio.wav')],
                 ],
             )
         with gr.Tab('Audio+Image to Image'):
@@ -46,14 +48,14 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                 inputs=["audio","image"],
                 outputs="image",
                 examples=[
-                    ['assets/wav/wave.wav', 'assets/image/bird.png'],
-                    ['assets/wav/wave.wav', 'assets/image/dog_image.jpg'],
-                    ['assets/wav/wave.wav', 'assets/image/room.png'],
-                    ['assets/wav/rain.wav', 'assets/image/room.png'],
+                    [os.path.join(CURRENT_DIR, 'assets/wav/wave.wav'), os.path.join(CURRENT_DIR, 'assets/image/bird.png')],
+                    [os.path.join(CURRENT_DIR, 'assets/wav/wave.wav'), os.path.join(CURRENT_DIR, 'assets/image/dog_image.jpg')],
+                    [os.path.join(CURRENT_DIR, 'assets/wav/wave.wav'), os.path.join(CURRENT_DIR, 'assets/image/room.png')],
+                    [os.path.join(CURRENT_DIR, 'assets/wav/rain.wav'), os.path.join(CURRENT_DIR, 'assets/image/room.png')],
                 ],
             )
         with gr.Tab('Image to Image'):
-            image_dir = 'assets/image'
+            image_dir = os.path.join(CURRENT_DIR, 'assets/image')
             def image2image(image): return anything2img(image=image)
             gr.Interface(
                 fn=image2image,
@@ -78,7 +80,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                 fn=textany2image,
                 inputs=["text", "image", "audio"],
                 outputs="image",
-                examples=[['A painting.', 'assets/image/bird.png', 'assets/wav/wave.wav']],
+                examples=[['A painting.', os.path.join(CURRENT_DIR, 'assets/image/bird.png'), os.path.join(CURRENT_DIR, 'assets/wav/wave.wav')]],
             )
         
     demo.queue(1).launch(server_name=ip, server_port=port, share=share)

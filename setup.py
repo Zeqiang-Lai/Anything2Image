@@ -1,12 +1,19 @@
 from setuptools import setup, find_packages
+import os
+
+image_dir = 'assets/image'
+image_data = [os.path.join(image_dir, name) for name in os.listdir(image_dir)]
+
+wav_dir = 'assets/wav'
+wav_data = [os.path.join(wav_dir, name) for name in os.listdir(wav_dir)]
 
 
 setup(
     name='anything2image',
-    version='1.0.6',
+    version='1.0.7',
     packages=find_packages(),
     package_data={
-        'anything2image': ['imagebind/bpe/bpe_simple_vocab_16e6.txt.gz']
+        'anything2image': ['imagebind/bpe/bpe_simple_vocab_16e6.txt.gz'] + image_data + wav_data
     },
     include_package_data=True,
     install_requires=[
