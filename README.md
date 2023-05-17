@@ -21,6 +21,10 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - Depth to Image: Coming soon.
 - Thermal to Image: Coming soon.
 
+
+https://github.com/Zeqiang-Lai/Anything2Image/assets/26198430/eac4a947-c6b1-4553-91c3-4aec5625908b
+
+
 ## Getting Started
 
 **Requirements**
