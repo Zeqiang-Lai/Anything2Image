@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 import os
 
-image_dir = 'assets/image'
-image_data = [os.path.join(image_dir, name) for name in os.listdir(image_dir)]
+image_dir = 'anything2image/assets/image'
+image_data = [os.path.join('assets/image', name) for name in os.listdir(image_dir)]
 
-wav_dir = 'assets/wav'
-wav_data = [os.path.join(wav_dir, name) for name in os.listdir(wav_dir)]
+wav_dir = 'anything2image/assets/wav'
+wav_data = [os.path.join('assets/wav', name) for name in os.listdir(wav_dir)]
 
 
 setup(
