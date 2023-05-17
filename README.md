@@ -1,12 +1,12 @@
 # Anything To Image
-<a href='https://huggingface.co/spaces/aaronb/Anything2Image'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue'></a>
+<!-- <a href='https://huggingface.co/spaces/aaronb/Anything2Image'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue'></a> -->
 [![PyPI](https://img.shields.io/pypi/v/anything2image)](https://pypi.org/project/anything2image/) 
 
 Generate image from anything with [ImageBind](https://github.com/facebookresearch/ImageBind)'s unified latent space and [stable-diffusion-2-1-unclip](https://huggingface.co/stabilityai/stable-diffusion-2-1-unclip). 
 
 - No training is need.
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
-- Online gradio demo with [Huggingface Space](https://huggingface.co/spaces/aaronb/Anything2Image). 
+- Online demo with [Huggingface Gradio](#getting-started). 
 
 **Support Tasks**
 
