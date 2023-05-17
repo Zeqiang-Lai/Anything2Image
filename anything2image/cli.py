@@ -3,6 +3,7 @@ import fire
 from anything2image.api import Anything2Image
 import soundfile as sf
 from PIL import Image
+import numpy as np
 
 def main(
     prompt='', audio=None, image=None, text=None,
@@ -13,7 +14,7 @@ def main(
         data, samplerate = sf.read(audio)
         audio = (samplerate, data)
     if image is not None: 
-        image = Image.open(image)
+        image = np.array(Image.open(image))
     image = anything2img(prompt=prompt, audio=audio, image=image, text=text)
     image.save('cli_output.png')
 

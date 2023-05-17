@@ -1,5 +1,6 @@
 # Anything To Image
 <a href='https://huggingface.co/spaces/aaronb/Anything2Image'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue'></a>
+[![PyPI](https://img.shields.io/pypi/v/anything2image)](https://pypi.org/project/anything2image/) 
 
 Generate image from anything with [ImageBind](https://github.com/facebookresearch/ImageBind)'s unified latent space and [stable-diffusion-2-1-unclip](https://huggingface.co/stabilityai/stable-diffusion-2-1-unclip). 
 
@@ -25,10 +26,6 @@ python -m anything2image.app
 
 ## Audio to Image
 
-```bash
-python -m anything2image.cli --audio assets/wav/cat.wav
-```
-
 | [bird_audio.wav](assets/wav/bird_audio.wav) | [dog_audio.wav](assets/wav/dog_audio.wav) |  [cattle.wav](assets/wav/cattle.wav) | [cat.wav](assets/wav/cat.wav) | 
 | --- | --- | --- | --- | 
 | ![](assets/generated/audio_to_image/bird_audio.png) | ![](assets/generated/audio_to_image/dog_audio.png) |![](assets/generated/audio_to_image/cattle.png) |![](assets/generated/audio_to_image/cat.png) |
@@ -37,6 +34,10 @@ python -m anything2image.cli --audio assets/wav/cat.wav
 | --- | --- | --- | --- | 
 | ![](assets/generated/audio_to_image/fire_engine.png) | ![](assets/generated/audio_to_image/train.png) |![](assets/generated/audio_to_image/motorcycle.png) |![](assets/generated/audio_to_image/plane.png) |
 
+
+```bash
+python -m anything2image.cli --audio assets/wav/cat.wav
+```
 
 See also [audio2img.py](tasks/audio2img.py).
 
@@ -71,8 +72,11 @@ with torch.no_grad():
 | A painting    | A photo    |  A painting   |  A photo   | 
 | ![](assets/generated/audio_text_to_image/cat_a_painting.png) | ![](assets/generated/audio_text_to_image/cat_a_photo.png) |![](assets/generated/audio_text_to_image/bird_a_painting.png) |![](assets/generated/audio_text_to_image/bird_a_photo.png) |
 
+```bash
+python -m anything2image.cli --audio assets/wav/cat.wav --prompt "a painting"
+```
 
-See [audiotext2img.py](audiotext2img.py).
+See also [audiotext2img.py](tasks/audiotext2img.py).
 
 ```python
 with torch.no_grad():
@@ -92,6 +96,10 @@ Stay tuned
 | Image | Audio 1 | Output 1 |  Audio 2  | Output 2 | 
 | --- | --- | --- | --- | --- | 
 | ![](assets/image/bird.png) | [wave.wav](assets/wav/wave.wav) | ![](assets/generated/audio_image_to_image/bird_wave.png) |  [rain.wav](assets/wav/wave.wav) | ![](assets/generated/audio_image_to_image/bird_rain.png) | 
+
+```bash
+python -m anything2image.cli --audio assets/wav/wave.wav --image "assets/image/bird.png"
+```
 
 ```python
 with torch.no_grad():
@@ -115,9 +123,13 @@ with torch.no_grad():
 | --- | --- | --- | --- | 
 | ![](assets/generated/image_to_image/dog_image.png) | ![](assets/generated/image_to_image/bird_image.png) |![](assets/generated/image_to_image/car_image.png) |![](assets/generated/image_to_image/room.png) |
 
-Top: Input Images. Bottom: Generated Images. See [img2img.py](img2img.py). 
+Top: Input Images. Bottom: Generated Images. 
 
-> It is important to set `normalize=False`.
+```bash
+python -m anything2image.cli --image "assets/image/bird.png"
+```
+
+See also [img2img.py](tasks/img2img.py). 
 
 ```python
 with torch.no_grad():
@@ -137,6 +149,12 @@ with torch.no_grad():
 | ![](assets/generated/text_to_image/car.png) | ![](assets/generated/text_to_image/sunset.png) |![](assets/generated/text_to_image/city.png) |![](assets/generated/text_to_image/flower.png) |
 
 It is not necessary to use ImageBind for text to image. Nervertheless, we show the alignment of ImageBind's text latent space and its image spaces.
+
+```bash
+python -m anything2image.cli --text "A sunset over the ocean."
+```
+
+See also [text2img.py](tasks/text2img.py). 
 
 ```python
 with torch.no_grad():

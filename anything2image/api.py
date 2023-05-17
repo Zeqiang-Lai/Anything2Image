@@ -1,5 +1,6 @@
 import soundfile as sf
 import torch
+import numpy as np
 from diffusers import StableUnCLIPImg2ImgPipeline
 from PIL import Image
 
