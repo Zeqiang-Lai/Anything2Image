@@ -15,12 +15,12 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                 <p align="center"><a href="https://github.com/Zeqiang-Lai/Anything2Image"><b>https://github.com/Zeqiang-Lai/Anything2Image</b></p>
                 """)
         gr.Interface(fn=anything2img, 
-                     inputs=[gr.Text(placeholder="Enter a prompt in addition to the audio, image, text condition below", label="Prompt (Could be empty)"),
+                     inputs=["text",
                              "audio", 
                              "image", 
-                             "text"
+                             "text",
                              ], 
-                     outputs="image",
+                     outputs="text",
                      examples=[['', 'assets/wav/dog_audio.wav', None, None],
                                ['A painting', 'assets/wav/cat.wav', None, None],
                                ['', 'assets/wav/wave.wav', 'assets/image/bird.png', None],
