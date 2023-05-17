@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='anything2image',
-    version='1.0.2',
+    version='1.0.3',
     packages=find_packages(),
     package_data={
         'anything2image': ['imagebind/bpe/bpe_simple_vocab_16e6.txt.gz']
@@ -21,5 +21,7 @@ setup(
         'transformers',
         'gradio',
         'fire',
+        'pytorchvideo',
+        'accelerate'
     ],
 )

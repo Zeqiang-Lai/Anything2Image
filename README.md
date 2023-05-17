@@ -16,6 +16,11 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - [Image to Image](#image-to-image)
 - [Text to Image](#text-to-image)
 
+**Requirements**
+
+- Python >= 3.8
+- PyTorch >= 1.13
+
 **Usage**
 
 ```bash
