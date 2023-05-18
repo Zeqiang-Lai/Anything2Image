@@ -9,27 +9,28 @@ from . import imagebind
 
 class Anything2Image:
     def __init__(
-        self, 
-        device = "cuda:0" if torch.cuda.is_available() else "cpu",
+        self,
+        device="cuda:0" if torch.cuda.is_available() else "cpu",
         imagebind_download_dir="checkpoints",
     ):
         self.pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
             "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=None if device == 'cpu' else torch.float16,
         ).to(device)
-        self.schedulers = {s.__name__:s for s in self.pipe.scheduler.compatibles}
+        self.schedulers = {s.__name__: s for s in self.pipe.scheduler.compatibles}
         self.model = imagebind.imagebind_huge(pretrained=True, download_dir=imagebind_download_dir).eval().to(device)
         self.device = device
-        
+
     @torch.no_grad()
-    def __call__(self, 
-                 prompt=None, audio=None, image=None, text=None, depth=None, 
-                 audio_strenth=0.5, 
-                 noise_level=0, num_inference_steps=20, scheduler='PNDMScheduler'):
+    def __call__(self,
+                 prompt=None, audio=None, image=None, text=None, depth=None,
+                 audio_strenth=0.5,
+                 noise_level=0, num_inference_steps=20, scheduler='PNDMScheduler',
+                 width=512, height=512):
         device, model, pipe = self.device, self.model, self.pipe
         if scheduler is not None:
             pipe.scheduler = self.schedulers[scheduler].from_config(pipe.scheduler.config)
-        noise_level = int((self.pipe.image_noising_scheduler.config.num_train_timesteps-1) * noise_level)
-        
+        noise_level = int((self.pipe.image_noising_scheduler.config.num_train_timesteps - 1) * noise_level)
+
         if audio is not None:
             sr, waveform = audio
             sf.write('tmp.wav', waveform, sr)
@@ -45,7 +46,7 @@ class Anything2Image:
             }, normalize=False)
             image_embeddings = embeddings[imagebind.ModalityType.VISION]
             os.remove('tmp.png')
-            
+
         if depth is not None:
             Image.fromarray(depth).save('tmp.png')
             embeddings = model.forward({
@@ -53,9 +54,9 @@ class Anything2Image:
             }, normalize=True)
             depth_embeddings = embeddings[imagebind.ModalityType.DEPTH]
             os.remove('tmp.png')
-            
+
         if audio is not None and image is not None:
-            embeddings = audio_embeddings * audio_strenth + image_embeddings * (1-audio_strenth)
+            embeddings = audio_embeddings * audio_strenth + image_embeddings * (1 - audio_strenth)
         elif image is not None:
             embeddings = image_embeddings
         elif audio is not None:
@@ -64,15 +65,15 @@ class Anything2Image:
             embeddings = depth_embeddings
         else:
             embeddings = None
-        
+
         if text is not None and text != "":
             embeddings = self.model.forward({
                 imagebind.ModalityType.TEXT: imagebind.load_and_transform_text([text], device),
             }, normalize=False)
             embeddings = embeddings[imagebind.ModalityType.TEXT]
-        
+
         if embeddings is not None and self.device != 'cpu':
             embeddings = embeddings.half()
-        
-        images = pipe(prompt=prompt, image_embeds=embeddings, noise_level=noise_level, num_inference_steps=num_inference_steps).images
+
+        images = pipe(prompt=prompt, image_embeds=embeddings, noise_level=noise_level, num_inference_steps=num_inference_steps, width=width, height=height).images
         return images[0]
