@@ -21,6 +21,10 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - Depth to Image: Coming soon.
 - Thermal to Image: Coming soon.
 
+**Update**
+
+- [2023/5/18] [v1.0.8]: Gradio GUI - add options for controling noise level, audio-image embedding arithmetic strength, and number of inference steps.
+
 
 https://github.com/Zeqiang-Lai/Anything2Image/assets/26198430/eac4a947-c6b1-4553-91c3-4aec5625908b
 

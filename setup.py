@@ -7,13 +7,15 @@ image_data = [os.path.join('assets/image', name) for name in os.listdir(image_di
 wav_dir = 'anything2image/assets/wav'
 wav_data = [os.path.join('assets/wav', name) for name in os.listdir(wav_dir)]
 
+depth_dir = 'anything2image/assets/depth'
+depth_data = [os.path.join('assets/depth', name) for name in os.listdir(depth_dir)]
 
 setup(
     name='anything2image',
-    version='1.0.7',
+    version='1.0.8',
     packages=find_packages(),
     package_data={
-        'anything2image': ['imagebind/bpe/bpe_simple_vocab_16e6.txt.gz'] + image_data + wav_data
+        'anything2image': ['imagebind/bpe/bpe_simple_vocab_16e6.txt.gz'] + image_data + wav_data + depth_data
     },
     include_package_data=True,
     install_requires=[

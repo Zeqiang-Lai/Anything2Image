@@ -20,8 +20,12 @@ class Anything2Image:
         self.device = device
         
     @torch.no_grad()
-    def __call__(self, prompt=None, audio=None, image=None, text=None):
+    def __call__(self, 
+                 prompt=None, audio=None, image=None, text=None, depth=None, 
+                 audio_strenth=0.5, 
+                 noise_level=0, num_inference_steps=20):
         device, model, pipe = self.device, self.model, self.pipe
+        noise_level = int(noise_level)
         
         if audio is not None:
             sr, waveform = audio
@@ -38,12 +42,23 @@ class Anything2Image:
             }, normalize=False)
             image_embeddings = embeddings[imagebind.ModalityType.VISION]
             os.remove('tmp.png')
+            
+        if depth is not None:
+            Image.fromarray(depth).save('tmp.png')
+            embeddings = model.forward({
+                imagebind.ModalityType.DEPTH: imagebind.load_and_transform_depth_data(['tmp.png'], device),
+            }, normalize=True)
+            depth_embeddings = embeddings[imagebind.ModalityType.DEPTH]
+            os.remove('tmp.png')
+            
         if audio is not None and image is not None:
-            embeddings = (audio_embeddings + image_embeddings) / 2
+            embeddings = audio_embeddings * audio_strenth + image_embeddings * (1-audio_strenth)
         elif image is not None:
             embeddings = image_embeddings
         elif audio is not None:
             embeddings = audio_embeddings
+        elif depth is not None:
+            embeddings = depth_embeddings
         else:
             embeddings = None
         
@@ -56,5 +71,5 @@ class Anything2Image:
         if embeddings is not None and self.device != 'cpu':
             embeddings = embeddings.half()
         
-        images = pipe(prompt=prompt, image_embeds=embeddings).images
+        images = pipe(prompt=prompt, image_embeds=embeddings, noise_level=noise_level, num_inference_steps=num_inference_steps).images
         return images[0]

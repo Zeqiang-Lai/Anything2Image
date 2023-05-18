@@ -104,6 +104,30 @@ def load_and_transform_vision_data(image_paths, device):
     return torch.stack(image_ouputs, dim=0)
 
 
+def load_and_transform_depth_data(depth_paths, device):
+    if depth_paths is None:
+        return None
+
+    depth_ouputs = []
+    for depth_path in depth_paths:
+        data_transform = transforms.Compose(
+            [
+                transforms.Resize(
+                    224, interpolation=transforms.InterpolationMode.BICUBIC
+                ),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                # transforms.Normalize((0.5, ), (0.5, ))  # if I use this normalization, I cannot get good results...
+            ]
+        )
+        with open(depth_path, "rb") as fopen:
+            image = Image.open(fopen).convert("L")
+
+        image = data_transform(image).to(device)
+        depth_ouputs.append(image)
+    return torch.stack(depth_ouputs, dim=0)
+
+
 def load_and_transform_text(text, device):
     if text is None:
         return None
