@@ -16,6 +16,8 @@ class Anything2Image:
         self.pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
             "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=None if device == 'cpu' else torch.float16,
         ).to(device)
+        self.pipe.enable_model_cpu_offload()
+        self.pipe.enable_vae_slicing()
         self.schedulers = {s.__name__: s for s in self.pipe.scheduler.compatibles}
         self.model = imagebind.imagebind_huge(pretrained=True, download_dir=imagebind_download_dir).eval().to(device)
         self.device = device
