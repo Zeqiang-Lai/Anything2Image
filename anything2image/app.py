@@ -147,6 +147,28 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                              "A bird's-eye view of a cityscape.",
                              "A close-up of a flower."], inputs=[text])
 
+        
+        with gr.Tab('Thermal to Image'):
+            thermal_dir = os.path.join(CURRENT_DIR, 'assets/thermal')
+
+            def thermal2image(thermal, noise_level, num_inference_steps, scheduler, height, width):
+                return anything2img(thermal=thermal, noise_level=noise_level, num_inference_steps=num_inference_steps, scheduler=scheduler,
+                                    height=height, width=width)
+
+            with gr.Row():
+                with gr.Column():
+                    image = gr.Image()
+                    with gr.Row():
+                        clear_btn = gr.Button("Clear")
+                        submit_btn = gr.Button("Submit", variant='primary')
+                with gr.Column():
+                    output = gr.Image()
+                submit_btn.click(thermal2image, inputs=[image, noise_level, num_inference_steps, scheduler, height, width], outputs=[output])
+                clear_btn.click(fn=clear, inputs=[image, output], outputs=[image, output])
+            with gr.Row():
+                gr.Examples([os.path.join(thermal_dir, name) for name in os.listdir(thermal_dir)], inputs=[image])
+                
+                
         with gr.Tab('Text+Any to Image'):
             def textany2image(prompt, audio, image, audio_strenth, noise_level, num_inference_steps, scheduler, height, width):
                 return anything2img(prompt=prompt, image=image, audio=audio, audio_strenth=audio_strenth, noise_level=noise_level, num_inference_steps=num_inference_steps, scheduler=scheduler,

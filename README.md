@@ -18,8 +18,8 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - [Audio+Image to Image](#audioimage-to-image)
 - [Image to Image](#image-to-image)
 - [Text to Image](#text-to-image)
+- [Thermal to Image](#thermal-to-image)
 - Depth to Image: Coming soon.
-- Thermal to Image: Coming soon.
 
 **Update**
 
@@ -197,6 +197,31 @@ with torch.no_grad():
     embeddings = embeddings[ib.ModalityType.TEXT]
     images = pipe(image_embeds=embeddings.half()).images
     images[0].save("text2img.png")
+```
+
+## Thermal to Image
+
+| Input | Output | Input | Output|
+| --- | --- | --- | --- | 
+| ![](assets/thermal/030419.jpg) | ![](assets/generated/thermal_to_image/030419.png) |  ![](assets/thermal/030444.jpg) | ![](assets/generated/thermal_to_image/030444.png) | 
+
+Top: Input Images. Bottom: Generated Images. 
+
+```bash
+python -m anything2image.cli --thermal "assets/thermal/030419.jpg"
+```
+
+See also [thermal2img.py](tasks/thermal2img.py). 
+
+```python
+with torch.no_grad():
+    thermal_paths =['assets/thermal/030419.jpg']
+    embeddings = model.forward({
+        ib.ModalityType.THERMAL: ib.load_and_transform_thermal_data(thermal_paths, device),
+    }, normalize=True)
+    embeddings = embeddings[ib.ModalityType.THERMAL]
+    images = pipe(image_embeds=embeddings.half()).images
+    images[0].save("thermal2img.png")
 ```
 
 <!-- ## Discussion

@@ -22,7 +22,7 @@ class Anything2Image:
 
     @torch.no_grad()
     def __call__(self,
-                 prompt=None, audio=None, image=None, text=None, depth=None,
+                 prompt=None, audio=None, image=None, text=None, depth=None, thermal=None,
                  audio_strenth=0.5,
                  noise_level=0, num_inference_steps=20, scheduler='PNDMScheduler',
                  width=768, height=768):
@@ -55,6 +55,14 @@ class Anything2Image:
             depth_embeddings = embeddings[imagebind.ModalityType.DEPTH]
             os.remove('tmp.png')
 
+        if thermal is not None:
+            Image.fromarray(thermal).save('tmp.png')
+            embeddings = model.forward({
+                imagebind.ModalityType.THERMAL: imagebind.load_and_transform_thermal_data(['tmp.png'], device),
+            }, normalize=True)
+            thermal_embeddings = embeddings[imagebind.ModalityType.THERMAL]
+            os.remove('tmp.png')
+            
         if audio is not None and image is not None:
             embeddings = audio_embeddings * audio_strenth + image_embeddings * (1 - audio_strenth)
         elif image is not None:
@@ -63,6 +71,8 @@ class Anything2Image:
             embeddings = audio_embeddings
         elif depth is not None:
             embeddings = depth_embeddings
+        elif thermal is not None:
+            embeddings = thermal_embeddings
         else:
             embeddings = None
 
