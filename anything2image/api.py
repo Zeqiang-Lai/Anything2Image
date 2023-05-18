@@ -25,7 +25,7 @@ class Anything2Image:
                  prompt=None, audio=None, image=None, text=None, depth=None,
                  audio_strenth=0.5,
                  noise_level=0, num_inference_steps=20, scheduler='PNDMScheduler',
-                 width=512, height=512):
+                 width=768, height=768):
         device, model, pipe = self.device, self.model, self.pipe
         if scheduler is not None:
             pipe.scheduler = self.schedulers[scheduler].from_config(pipe.scheduler.config)

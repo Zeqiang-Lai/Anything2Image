@@ -30,9 +30,9 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                 scheduler = gr.Dropdown(choices=list(anything2img.schedulers.keys()), value='PNDMScheduler', 
                                         label='Scheduler', info='A scheduler to be used in combination with `unet` to denoise the encoded image latents.')
                 with gr.Column():
-                    gr.Markdown('The default image size is 512 x 512, other size might generate inferior results.')
-                    height = gr.Slider(0, 1280, value=512, step=8, label='Image Height', info='Too larger value might cause OOM error.')
-                    width = gr.Slider(0, 1280, value=512, step=8, label='Image Width', info='Too larger value might cause OOM error.')
+                    gr.Markdown('The default image size is 768 x 768, other size might generate inferior results.')
+                    height = gr.Slider(0, 1280, value=768, step=8, label='Image Height', info='Too larger value might cause OOM error.')
+                    width = gr.Slider(0, 1280, value=768, step=8, label='Image Width', info='Too larger value might cause OOM error.')
                 
         with gr.Tab('Audio to Image'):
             wav_dir = os.path.join(CURRENT_DIR, 'assets/wav')
