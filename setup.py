@@ -12,7 +12,7 @@ depth_data = [os.path.join('assets/depth', name) for name in os.listdir(depth_di
 
 setup(
     name='anything2image',
-    version='1.0.8',
+    version='1.0.9',
     packages=find_packages(),
     package_data={
         'anything2image': ['imagebind/bpe/bpe_simple_vocab_16e6.txt.gz'] + image_data + wav_data + depth_data

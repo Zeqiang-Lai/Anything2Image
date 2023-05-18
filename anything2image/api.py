@@ -11,11 +11,12 @@ class Anything2Image:
     def __init__(
         self, 
         device = "cuda:0" if torch.cuda.is_available() else "cpu",
-        imagebind_download_dir="checkpoints"
+        imagebind_download_dir="checkpoints",
     ):
         self.pipe = StableUnCLIPImg2ImgPipeline.from_pretrained(
             "stabilityai/stable-diffusion-2-1-unclip", torch_dtype=None if device == 'cpu' else torch.float16,
         ).to(device)
+        self.schedulers = {s.__name__:s for s in self.pipe.scheduler.compatibles}
         self.model = imagebind.imagebind_huge(pretrained=True, download_dir=imagebind_download_dir).eval().to(device)
         self.device = device
         
@@ -23,9 +24,11 @@ class Anything2Image:
     def __call__(self, 
                  prompt=None, audio=None, image=None, text=None, depth=None, 
                  audio_strenth=0.5, 
-                 noise_level=0, num_inference_steps=20):
+                 noise_level=0, num_inference_steps=20, scheduler='PNDMScheduler'):
         device, model, pipe = self.device, self.model, self.pipe
-        noise_level = int(noise_level)
+        if scheduler is not None:
+            pipe.scheduler = self.schedulers[scheduler].from_config(pipe.scheduler.config)
+        noise_level = int((self.pipe.image_noising_scheduler.config.num_train_timesteps-1) * noise_level)
         
         if audio is not None:
             sr, waveform = audio

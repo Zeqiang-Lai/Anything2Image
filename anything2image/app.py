@@ -23,16 +23,19 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
         )
         with gr.Accordion("Options", open=False):
             with gr.Row():
-                noise_level = gr.Slider(0, 100, value=0, step=1, label="Noise Level",
+                noise_level = gr.Slider(0, 1, value=0, label="Noise Level",
                                         info="The amount of noise to add to the image embeddings. A higher `noise_level` increases the variance in the final un-noised images.")
                 num_inference_steps = gr.Slider(5, 100, value=20, step=1, label="Num Inference Steps",
                                                 info='The number of denoising steps. More denoising steps usually lead to a higher quality image at the expense of slower inference')
-
+                scheduler = gr.Dropdown(choices=list(anything2img.schedulers.keys()), value='PNDMScheduler', 
+                                        label='Scheduler', info='A scheduler to be used in combination with `unet` to denoise the encoded image latents.')
+                
+                
         with gr.Tab('Audio to Image'):
             wav_dir = os.path.join(CURRENT_DIR, 'assets/wav')
 
-            def audio2image(audio, noise_level, num_inference_steps):
-                return anything2img(audio=audio, noise_level=noise_level, num_inference_steps=num_inference_steps)
+            def audio2image(audio, noise_level, num_inference_steps, scheduler):
+                return anything2img(audio=audio, noise_level=noise_level, num_inference_steps=num_inference_steps, scheduler=scheduler)
             with gr.Row():
                 with gr.Column():
                     audio = gr.Audio()
@@ -41,7 +44,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                         submit_btn = gr.Button("Submit", variant='primary')
                 with gr.Column():
                     output = gr.Image()
-                submit_btn.click(audio2image, inputs=[audio, noise_level, num_inference_steps], outputs=[output])
+                submit_btn.click(audio2image, inputs=[audio, noise_level, num_inference_steps, scheduler], outputs=[output])
                 clear_btn.click(fn=clear, inputs=[audio, output], outputs=[audio, output])
             with gr.Row():
                 gr.Examples([os.path.join(wav_dir, name) for name in os.listdir(wav_dir)], inputs=[audio])
@@ -49,8 +52,8 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
         with gr.Tab('Audio+Text to Image'):
             wav_dir = os.path.join(CURRENT_DIR, 'assets/wav')
 
-            def audiotext2image(prompt, audio, noise_level, num_inference_steps):
-                return anything2img(prompt=prompt, audio=audio, noise_level=noise_level, num_inference_steps=num_inference_steps)
+            def audiotext2image(prompt, audio, noise_level, num_inference_steps, scheduler):
+                return anything2img(prompt=prompt, audio=audio, noise_level=noise_level, num_inference_steps=num_inference_steps, scheduler=scheduler)
 
             with gr.Row():
                 with gr.Column():
@@ -61,7 +64,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                         submit_btn = gr.Button("Submit", variant='primary')
                 with gr.Column():
                     output = gr.Image()
-                submit_btn.click(audiotext2image, inputs=[prompt, audio, noise_level, num_inference_steps], outputs=[output])
+                submit_btn.click(audiotext2image, inputs=[prompt, audio, noise_level, num_inference_steps, scheduler], outputs=[output])
                 clear_btn.click(fn=clear, inputs=[audio, prompt, output], outputs=[audio, prompt, output])
             with gr.Row():
                 gr.Examples([
@@ -74,8 +77,8 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
         with gr.Tab('Audio+Image to Image'):
             wav_dir = 'assets/wav'
 
-            def audioimage2image(audio, image, audio_strenth, noise_level, num_inference_steps):
-                return anything2img(image=image, audio=audio, audio_strenth=audio_strenth, noise_level=noise_level, num_inference_steps=num_inference_steps)
+            def audioimage2image(audio, image, audio_strenth, noise_level, num_inference_steps, scheduler):
+                return anything2img(image=image, audio=audio, audio_strenth=audio_strenth, noise_level=noise_level, num_inference_steps=num_inference_steps, scheduler=scheduler)
 
             with gr.Row():
                 with gr.Column():
@@ -87,7 +90,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                         submit_btn = gr.Button("Submit", variant='primary')
                 with gr.Column():
                     output = gr.Image()
-                submit_btn.click(audioimage2image, inputs=[audio, image, audio_strenth, noise_level, num_inference_steps], outputs=[output])
+                submit_btn.click(audioimage2image, inputs=[audio, image, audio_strenth, noise_level, num_inference_steps, scheduler], outputs=[output])
                 clear_btn.click(fn=clear, inputs=[audio, image, output], outputs=[audio, image, output])
             with gr.Row():
                 gr.Examples([
@@ -100,8 +103,8 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
         with gr.Tab('Image to Image'):
             image_dir = os.path.join(CURRENT_DIR, 'assets/image')
 
-            def image2image(image, noise_level, num_inference_steps):
-                return anything2img(image=image, noise_level=noise_level, num_inference_steps=num_inference_steps)
+            def image2image(image, noise_level, num_inference_steps, scheduler):
+                return anything2img(image=image, noise_level=noise_level, num_inference_steps=num_inference_steps, scheduler=scheduler)
 
             with gr.Row():
                 with gr.Column():
@@ -111,14 +114,14 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                         submit_btn = gr.Button("Submit", variant='primary')
                 with gr.Column():
                     output = gr.Image()
-                submit_btn.click(image2image, inputs=[image, noise_level, num_inference_steps], outputs=[output])
+                submit_btn.click(image2image, inputs=[image, noise_level, num_inference_steps, scheduler], outputs=[output])
                 clear_btn.click(fn=clear, inputs=[image, output], outputs=[image, output])
             with gr.Row():
                 gr.Examples([os.path.join(image_dir, name) for name in os.listdir(image_dir)], inputs=[image])
 
         with gr.Tab('Text to Image'):
-            def text2image(text, noise_level, num_inference_steps=num_inference_steps):
-                return anything2img(text=text, noise_level=noise_level, num_inference_steps=num_inference_steps)
+            def text2image(text, noise_level, num_inference_steps, scheduler):
+                return anything2img(text=text, noise_level=noise_level, num_inference_steps=num_inference_steps, scheduler=scheduler)
 
             with gr.Row():
                 with gr.Column():
@@ -128,7 +131,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                         submit_btn = gr.Button("Submit", variant='primary')
                 with gr.Column():
                     output = gr.Image()
-                submit_btn.click(text2image, inputs=[text, noise_level, num_inference_steps], outputs=[output])
+                submit_btn.click(text2image, inputs=[text, noise_level, num_inference_steps, scheduler], outputs=[output])
                 clear_btn.click(fn=clear, inputs=[text, output], outputs=[text, output])
             with gr.Row():
                 gr.Examples(['A sunset over the ocean.',
@@ -137,8 +140,8 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                              "A close-up of a flower."], inputs=[text])
 
         with gr.Tab('Text+Any to Image'):
-            def textany2image(prompt, audio, image, audio_strenth, noise_level, num_inference_steps):
-                return anything2img(prompt=prompt, image=image, audio=audio, audio_strenth=audio_strenth, noise_level=noise_level, num_inference_steps=num_inference_steps)
+            def textany2image(prompt, audio, image, audio_strenth, noise_level, num_inference_steps, scheduler):
+                return anything2img(prompt=prompt, image=image, audio=audio, audio_strenth=audio_strenth, noise_level=noise_level, num_inference_steps=num_inference_steps, scheduler=scheduler)
 
             with gr.Row():
                 with gr.Column():
@@ -151,7 +154,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
                         submit_btn = gr.Button("Submit", variant='primary')
                 with gr.Column():
                     output = gr.Image()
-                submit_btn.click(textany2image, inputs=[text, audio, image, audio_strenth, noise_level, num_inference_steps], outputs=[output])
+                submit_btn.click(textany2image, inputs=[text, audio, image, audio_strenth, noise_level, num_inference_steps, scheduler], outputs=[output])
                 clear_btn.click(fn=clear, inputs=[text, audio, image, output], outputs=[text, audio, image, output])
             with gr.Row():
                 gr.Examples([['A painting.', os.path.join(CURRENT_DIR, 'assets/image/bird.png'), os.path.join(CURRENT_DIR, 'assets/wav/wave.wav')]], inputs=[text, image, audio])
