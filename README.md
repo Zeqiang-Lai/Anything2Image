@@ -23,6 +23,7 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 **Update**
 
+- [2023/5/18] [v1.1.3]: Support thermal to image.
 - [2023/5/18] [v1.1.0]: Gradio GUI - add options for controling image size, and noise scheduler.
 - [2023/5/18] [v1.0.8]: Gradio GUI - add options for controling noise level, audio-image embedding arithmetic strength, and number of inference steps.
 

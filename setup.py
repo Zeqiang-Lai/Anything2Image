@@ -16,7 +16,7 @@ thermal_data = [os.path.join('assets/thermal', name) for name in os.listdir(ther
 
 setup(
     name='anything2image',
-    version='1.1.2',
+    version='1.1.3',
     packages=find_packages(),
     package_data={
         'anything2image': ['imagebind/bpe/bpe_simple_vocab_16e6.txt.gz'] + image_data + wav_data + depth_data + thermal_data

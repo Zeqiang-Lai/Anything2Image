@@ -12,7 +12,7 @@ def clear(*args):
 
 def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'checkpoints'), ip=None, port=None, share=False):
     anything2img = Anything2Image(imagebind_download_dir=ckpt_dir)
-
+    
     with gr.Blocks() as demo:
         gr.HTML(
             """
@@ -190,7 +190,7 @@ def main(ckpt_dir=os.path.join(os.path.expanduser('~'), 'anything2image', 'check
             with gr.Row():
                 gr.Examples([['A painting.', os.path.join(CURRENT_DIR, 'assets/image/bird.png'), os.path.join(CURRENT_DIR, 'assets/wav/wave.wav')]], inputs=[text, image, audio])
 
-    demo.launch(server_name=ip, server_port=port, share=share)
+    demo.launch(server_name=ip, server_port=port, share=share, allowed_paths=[os.path.join(CURRENT_DIR, 'assets')])
 
 
 fire.Fire(main)
