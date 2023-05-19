@@ -25,7 +25,7 @@ class Anything2Image:
     @torch.no_grad()
     def __call__(self,
                  prompt=None, audio=None, image=None, text=None, depth=None, thermal=None,
-                 audio_strenth=0.5,
+                 audio_strength=0.5,
                  noise_level=0, num_inference_steps=20, scheduler='PNDMScheduler',
                  width=768, height=768):
         device, model, pipe = self.device, self.model, self.pipe
@@ -64,9 +64,17 @@ class Anything2Image:
             }, normalize=True)
             thermal_embeddings = embeddings[imagebind.ModalityType.THERMAL]
             os.remove('tmp.png')
-            
+
+        if text is not None and text != "":
+            embeddings = self.model.forward({
+                imagebind.ModalityType.TEXT: imagebind.load_and_transform_text([text], device),
+            }, normalize=False)
+            text_embeddings = embeddings[imagebind.ModalityType.TEXT]
+
         if audio is not None and image is not None:
-            embeddings = audio_embeddings * audio_strenth + image_embeddings * (1 - audio_strenth)
+            embeddings = audio_embeddings * audio_strength + image_embeddings * (1 - audio_strength)
+        elif audio is not None and text is not None:
+            embeddings = audio_embeddings * audio_strength + text_embeddings * (1 - audio_strength)
         elif image is not None:
             embeddings = image_embeddings
         elif audio is not None:
@@ -75,14 +83,10 @@ class Anything2Image:
             embeddings = depth_embeddings
         elif thermal is not None:
             embeddings = thermal_embeddings
+        elif text is not None:
+            embeddings = text_embeddings
         else:
             embeddings = None
-
-        if text is not None and text != "":
-            embeddings = self.model.forward({
-                imagebind.ModalityType.TEXT: imagebind.load_and_transform_text([text], device),
-            }, normalize=False)
-            embeddings = embeddings[imagebind.ModalityType.TEXT]
 
         if embeddings is not None and self.device != 'cpu':
             embeddings = embeddings.half()

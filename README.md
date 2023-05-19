@@ -23,6 +23,7 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 **Update**
 
+- [2023/5/19] [v1.1.4]: Support fusing audio and text in ImageBind latent space and UI improvements.
 - [2023/5/18] [v1.1.3]: Support thermal to image.
 - [2023/5/18] [v1.1.0]: Gradio GUI - add options for controling image size, and noise scheduler.
 - [2023/5/18] [v1.0.8]: Gradio GUI - add options for controling noise level, audio-image embedding arithmetic strength, and number of inference steps.
@@ -106,7 +107,7 @@ with torch.no_grad():
 | [cat.wav](assets/wav/cat.wav) | [cat.wav](assets/wav/cat.wav) |  [bird_audio.wav](assets/wav/bird_audio.wav) | [bird_audio.wav](assets/wav/bird_audio.wav) | 
 | --- | --- | --- | --- | 
 | A painting    | A photo    |  A painting   |  A photo   | 
-| ![](assets/generated/audio_text_to_image/cat_a_painting.png) | ![](assets/generated/audio_text_to_image/cat_a_photo.png) |![](assets/generated/audio_text_to_image/bird_a_painting.png) |![](assets/generated/audio_text_to_image/bird_a_photo.png) |
+| ![](assets/generated/audio_text_to_image/cat_a_painting.png) | ![](assets/generated/audio_text_to_image/cat_a_photo.png) |![](assets/generated/audio_text_to_image/bird_a_painting2.png) |![](assets/generated/audio_text_to_image/bird_a_photo.png) |
 
 ```bash
 python -m anything2image.cli --audio assets/wav/cat.wav --prompt "a painting"
