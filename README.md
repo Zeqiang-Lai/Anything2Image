@@ -23,10 +23,16 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 
 **Update**
 
-- [2023/5/19] [v1.1.4]: Support fusing audio and text in ImageBind latent space and UI improvements.
-- [2023/5/18] [v1.1.3]: Support thermal to image.
-- [2023/5/18] [v1.1.0]: Gradio GUI - add options for controling image size, and noise scheduler.
-- [2023/5/18] [v1.0.8]: Gradio GUI - add options for controling noise level, audio-image embedding arithmetic strength, and number of inference steps.
+[2023/5/19]: 
+
+- Anything2Image has been integrated into [InternGPT](https://github.com/OpenGVLab/InternGPT).
+- [v1.1.4]: Support fusing audio and text in ImageBind latent space and UI improvements.
+
+[2023/5/18] 
+
+- [v1.1.3]: Support thermal to image.
+- [v1.1.0]: Gradio GUI - add options for controling image size, and noise scheduler.
+- [v1.0.8]: Gradio GUI - add options for controling noise level, audio-image embedding arithmetic strength, and number of inference steps.
 
 
 https://github.com/Zeqiang-Lai/Anything2Image/assets/26198430/eac4a947-c6b1-4553-91c3-4aec5625908b
