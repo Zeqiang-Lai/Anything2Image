@@ -17,11 +17,11 @@ model.to(device)
 with torch.no_grad():
     embeddings = model.forward({
         ib.ModalityType.VISION: ib.load_and_transform_vision_data(["assets/image/bird.png"], device),
-    })
+    }, normalize=False)
     img_embeddings = embeddings[ib.ModalityType.VISION]
     embeddings = model.forward({
         ib.ModalityType.AUDIO: ib.load_and_transform_audio_data(["assets/wav/wave.wav"], device),
-    }, normalize=False)
+    })
     audio_embeddings = embeddings[ib.ModalityType.AUDIO]
     embeddings = (img_embeddings + audio_embeddings)/2
     images = pipe(image_embeds=embeddings.half()).images
