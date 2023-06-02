@@ -9,7 +9,7 @@ Generate image from anything with [ImageBind](https://github.com/facebookresearc
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
 - Online demo with [Huggingface Gradio](https://huggingface.co/spaces/aaronb/Anything2Image) and [Google Colab](https://colab.research.google.com/github/Zeqiang-Lai/Anything2Image/blob/main/colab.ipynb). 
 
-*Note that gradio and colab online demo might need pro account to obtain more GPU/memory to run them.*
+*We need at least 22 Gb GPU memory for the demo. Therefore gradio and colab online demo might need pro account to obtain more GPU/memory to run them.*
 
 **Support Tasks**
 
