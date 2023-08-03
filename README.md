@@ -5,6 +5,8 @@
 
 Generate image from anything with [ImageBind](https://github.com/facebookresearch/ImageBind)'s unified latent space and [stable-diffusion-2-1-unclip](https://huggingface.co/stabilityai/stable-diffusion-2-1-unclip). 
 
+> TODO: Currently, we only support ImageBind-Huge with 1024 latent space. However, it might be possible to use [StableDiffusionImageVariation](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/image_variation) for 768 latent space. 
+
 - No training is need.
 - Integration with 🤗  [Diffusers](https://github.com/huggingface/diffusers).
 - Online demo with [Huggingface Gradio](https://huggingface.co/spaces/aaronb/Anything2Image) and [Google Colab](https://colab.research.google.com/github/Zeqiang-Lai/Anything2Image/blob/main/colab.ipynb). 
